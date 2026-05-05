@@ -270,12 +270,9 @@ ui <- fluidPage(
   
   # Header
   div(class = "app-header",
-      tags$img(
-        src    = "fao-logo.svg",
-        height = "40px"),
       div(
         p(class = "app-title",    "codelist2Excel"),
-        p(class = "app-subtitle", "Select a codelist, visualize it and export it into Excel."),
+        p(class = "app-subtitle", "Select a codelist, visualize it and export it into Excel.")
       )
   ),
   
@@ -290,8 +287,8 @@ ui <- fluidPage(
               selectInput(
                 inputId  = "selected_codelist",
                 label    = NULL,
-                choices  = all_codelists$id,
-                selected = "geographicAreaM49",
+                choices  = c(" " = "", all_codelists$id),
+                selected = "",
                 width    = "240px"
               )
           ),
@@ -312,7 +309,7 @@ ui <- fluidPage(
       # ── Table section ───────────────────────────────
       div(class = "table-card",
           div(class = "table-card-header",
-              div(class = "table-card-title", textOutput("table_title", inline = TRUE)),
+              div(class = "table-card-title", textOutput("table_title", inline = TRUE))
           ),
           DTOutput("table")
       )
@@ -327,17 +324,20 @@ server <- function(input, output, session) {
   
   # Reactive data in function of the dropdown
   selected_dt <- reactive({
+    req(input$selected_codelist)
     get_codelist_info(input$selected_codelist)
   })
   
   # Get parent-children data
   pc_data <- reactive({
+    req(input$selected_codelist)
     dt <- selected_dt()
     dt[, .(children = unlist(strsplit(as.character(children), ", "))), by = code]
   })
   
   # Badge with number of rows/columns
   output$info_badge <- renderUI({
+    req(input$selected_codelist)
     dt <- selected_dt()
     div(class = "ctrl-group",
         div(class = "ctrl-label", "\u00a0"),
@@ -349,6 +349,7 @@ server <- function(input, output, session) {
   
   # Title of the chart
   output$table_title <- renderText({
+    req(input$selected_codelist)
     input$selected_codelist
   })
   
