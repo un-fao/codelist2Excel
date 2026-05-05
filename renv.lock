@@ -782,7 +782,7 @@
     "faosws": {
       "Package": "faosws",
       "Version": "1.1.2",
-      "Source": "unknown",
+      "Source": "RSPM",
       "Type": "Package",
       "Title": "API providing access to the FAO Statistical Working System",
       "Authors@R": "c( person(\"Engineering Ingegneria Informatica\", role=\"aut\"), person(\"Sebastian\", \"Campbell\", email=\"Sebastian.Campbell@fao.org\", role=\"cre\"), person(\"Joshua\", \"Browning\", email=\"Joshua.Browning@fao.org\", role=\"ctb\"))",
@@ -818,7 +818,7 @@
     "faoswsFlag": {
       "Package": "faoswsFlag",
       "Version": "0.5.9",
-      "Source": "unknown",
+      "Source": "RSPM",
       "Type": "Package",
       "Title": "Package to manipulate and aggregate observational status",
       "Authors@R": "c(person(\"Michael C. J.\", \"Kao\", role = \"aut\", email = \"michael.kao@fao.org\"), person(\"Francesca\", \"Rosa\", role = \"cre\", email = \"francesca.rosa@fao.org\"), person(\"Josh\", \"Browning\", role = \"ctb\", email = \"joshua.browning@fao.org\"))",
@@ -850,7 +850,7 @@
     "faoswsModules": {
       "Package": "faoswsModules",
       "Version": "0.4.1",
-      "Source": "unknown",
+      "Source": "RSPM",
       "Type": "Package",
       "Title": "Tools to create and maintain modules of the Statistical Working System",
       "Authors@R": "person(\"Sebastian\", \"Campbell\", role = c(\"aut\", \"cre\"), email = \"sebastian.campbell@fao.org\")",
@@ -880,7 +880,7 @@
     "faoswsUtil": {
       "Package": "faoswsUtil",
       "Version": "0.4.5",
-      "Source": "Repository",
+      "Source": "RSPM",
       "Type": "Package",
       "Title": "A suite of function to support the FAO new Statistical Working System",
       "Date": "2018-08-05",
