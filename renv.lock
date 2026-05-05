@@ -211,7 +211,7 @@
     },
     "SwsApiClient": {
       "Package": "SwsApiClient",
-      "Version": "0.18.0.9003",
+      "Version": "0.18.0",
       "Source": "RSPM",
       "Type": "Package",
       "Title": "SWS API Client",
