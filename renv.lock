@@ -4,11 +4,15 @@
     "Repositories": [
       {
         "Name": "CRAN",
-        "URL": "https://packagemanager.posit.co/cran/latest"
+        "URL": "https://rstudiopm.aws.fao.org/fao-sws-cran/__linux__/centos7/latest",
+      },
+      {
+        "Name": "RSPM",
+        "URL": "https://rstudiopm.aws.fao.org/fao-sws-cran/__linux__/centos7/latest"
       },
       {
         "Name": "BASE",
-        "URL": "https://rstudiopm.qa.aws.fao.org/fao-sws-cran"
+        "URL": "https://rstudiopm.aws.fao.org/fao-sws-cran/__linux__/centos7/latest"
       }
     ]
   },
