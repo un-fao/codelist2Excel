@@ -8,6 +8,7 @@ library(faosws)
 library(faoswsUtil)
 library(SwsApiClient)
 library(writexl)
+library(lubridate)
 
 # Connection to SWS #######################################################
 
