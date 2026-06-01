@@ -11,6 +11,31 @@ convert_date <- function(date) {
   return(date_formated)
 }
 
+
+make_excel <- function(codelist_data, codelist_name){
+  # Add codelist name (scheme name)
+  codelist_data[, codelist := codelist_name]
+  # Find the top concepts
+  codelist_children <- unique(trimws(unlist(strsplit(unlist(codelist_data$children), ","))))
+  top_concept_codes <- setdiff(codelist_data$code, codelist_children)
+  # Add the top concept column
+  codelist_data[code %in% top_concept_codes, top := code]
+  # Add the code's parent
+  parent_children_data <- codelist_data[, .(code, children)]
+  parent_children_data <- parent_children_data[, .(children = unlist(strsplit(as.character(children), ", "))), by = code]
+  setnames(parent_children_data, c("code", "children"), c("parent", "code"))
+  codelist_data <- merge(codelist_data, parent_children_data, by = "code", all.x = TRUE)
+  # Remove children column
+  codelist_data[, children := NULL]
+  # Reorder columns
+  codelist_data <- codelist_data[, .(code, parent, label_en, label_fr, label_es,
+                                     label_ru, label_zh, label_ar, description,
+                                     start_date, end_date, order, unit, virtual,
+                                     codelist, top)]
+  # Return
+  return(codelist_data)
+}
+
 get_codelist_info <- function(codelist_id){
   # /!\ Initialize client before using /!\
   
@@ -29,6 +54,9 @@ get_codelist_info <- function(codelist_id){
   # Transform the start and end dates
   codes_info_codes[, start_date := convert_date(as.numeric(start_date))]
   codes_info_codes[, end_date := convert_date(as.numeric(end_date))]
+  
+  # Transform for the Excel
+  codes_info_codes <- make_excel(codes_info_codes, codelist_id)
   
   # Return
   return(codes_info_codes)

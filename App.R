@@ -329,12 +329,12 @@ server <- function(input, output, session) {
     get_codelist_info(input$selected_codelist)
   })
   
-  # Get parent-children data
-  pc_data <- reactive({
-    req(input$selected_codelist)
-    dt <- selected_dt()
-    dt[, .(children = unlist(strsplit(as.character(children), ", "))), by = code]
-  })
+  # # Get parent-children data
+  # pc_data <- reactive({
+  #   req(input$selected_codelist)
+  #   dt <- selected_dt()
+  #   dt[, .(children = unlist(strsplit(as.character(children), ", "))), by = code]
+  # })
   
   # Badge with number of rows/columns
   output$info_badge <- renderUI({
@@ -395,8 +395,8 @@ server <- function(input, output, session) {
     content = function(file) {
       write_xlsx(
         list(
-          "Codelist"        = selected_dt(),
-          "Parent-Children" = pc_data()
+          "Codelist"        = selected_dt()
+          # "Parent-Children" = pc_data()
         ),
         path = file
       )
