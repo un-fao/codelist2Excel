@@ -6,7 +6,7 @@ convert_date <- function(date) {
   # Round date
   ts_round <- ceiling_date(ts, unit = "day")
   # Change the format
-  date_formated <- format(ts_round, "%d/%b/%Y")
+  date_formated <- format(ts_round, "%Y/%m/%d")
   # Return
   return(date_formated)
 }
