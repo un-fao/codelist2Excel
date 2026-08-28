@@ -26,7 +26,7 @@ if(CheckDebug()){
 
 # Get the list of codelists ###############################################
 
-# all_codelists <- getAllCodelists()
+all_codelists <- getAllCodelists()
 
 # Import utils functions ##################################################
 
@@ -287,7 +287,7 @@ ui <- fluidPage(
               selectInput(
                   inputId  = "selected_codelist",
                   label    = NULL,
-                  choices  = c(" " = "", getAllCodelists()$id),
+                  choices  = c(" " = "", all_codelists$id),
                   selected = "",
                   width    = "240px"
                 )
