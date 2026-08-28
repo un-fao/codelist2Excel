@@ -28,10 +28,15 @@ make_excel <- function(codelist_data, codelist_name){
   # Remove children column
   codelist_data[, children := NULL]
   # Reorder columns
-  codelist_data <- codelist_data[, .(code, parent, label_en, label_fr, label_es,
-                                     label_ru, label_zh, label_ar, description,
-                                     start_date, end_date, order, unit, virtual,
-                                     codelist, top)]
+  wanted_cols <- c("code", "parent", "label_en", "label_fr", "label_es",
+                   "label_ru", "label_zh", "label_ar", "description",
+                   "start_date", "end_date", "order", "unit", "virtual", "type",
+                   "codelist", "top")
+  
+  existing_cols <- intersect(wanted_cols, names(codelist_data))
+
+  codelist_data <- codelist_data[, ..existing_cols]
+
   # Return
   return(codelist_data)
 }
