@@ -19,15 +19,14 @@ if(CheckDebug()){
   
   # SetClientFiles(SETT[["certdir"]])
   GetTestEnvironment(baseUrl = SETT[["server"]], token = SETT[["token"]])
-  
-}
 
-# Initialize client
-initializeClient()
+  # # Initialize client
+  # initializeClient()
+}
 
 # Get the list of codelists ###############################################
 
-all_codelists <- getAllCodelists()
+# all_codelists <- getAllCodelists()
 
 # Import utils functions ##################################################
 
@@ -286,13 +285,13 @@ ui <- fluidPage(
           div(class = "ctrl-group",
               div(class = "ctrl-label", "Select your codelist"),
               selectInput(
-                inputId  = "selected_codelist",
-                label    = NULL,
-                choices  = c(" " = "", all_codelists$id),
-                selected = "",
-                width    = "240px"
-              )
-          ),
+                  inputId  = "selected_codelist",
+                  label    = NULL,
+                  choices  = c(" " = ""),
+                  selected = "",
+                  width    = "240px"
+                )
+              ),
           
           div(class = "ctrl-group",
               div(class = "ctrl-label", "Export"),
@@ -322,6 +321,20 @@ ui <- fluidPage(
 # -------------------------------------------------------------------------
 
 server <- function(input, output, session) {
+
+  user <- reactiveVal(NULL)
+
+  observeEvent(TRUE, {
+    tryCatch({
+      initialiseClient(session = session, sws_endpoint = "https://sws.fao.org")
+      user(getCurrentUser())
+      codelists <- getAllCodelists()
+      updateSelectInput(session, "selected_codelist",
+                        choices = c(" " = "", codelists$id))
+    }, error = function(e) {
+      showNotification(paste0("Initialization failed: ", e$message), type = "error")
+    })
+  }, once = TRUE, ignoreNULL = FALSE)
   
   # Reactive data in function of the dropdown
   selected_dt <- reactive({
