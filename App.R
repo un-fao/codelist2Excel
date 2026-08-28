@@ -287,7 +287,7 @@ ui <- fluidPage(
               selectInput(
                   inputId  = "selected_codelist",
                   label    = NULL,
-                  choices  = c(" " = ""),
+                  choices  = c(" " = "", getAllCodelists()$id),
                   selected = "",
                   width    = "240px"
                 )
@@ -328,9 +328,9 @@ server <- function(input, output, session) {
     tryCatch({
       initialiseClient(session = session, sws_endpoint = "https://sws.fao.org")
       user(getCurrentUser())
-      codelists <- getAllCodelists()
-      updateSelectInput(session, "selected_codelist",
-                        choices = c(" " = "", codelists$id))
+      # codelists <- getAllCodelists()
+      # updateSelectInput(session, "selected_codelist",
+      #                   choices = c(" " = "", codelists$id))
     }, error = function(e) {
       showNotification(paste0("Initialization failed: ", e$message), type = "error")
     })
