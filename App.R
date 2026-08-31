@@ -324,7 +324,7 @@ server <- function(input, output, session) {
   user <- reactiveVal(NULL)
 
     tryCatch({
-      initialiseClient(conf_file = "sws.yml", session = session, sws_endpoint = sys.getenv("SWS_ENDPOINT"))
+      initialiseClient(conf_file = "sws.yml", session = session, sws_endpoint = Sys.getenv("SWS_ENDPOINT"))
       showNotification("Client initialization successful", type = "default")
       user(getCurrentUser())
 
