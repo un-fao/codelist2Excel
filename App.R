@@ -13,15 +13,13 @@ library(lubridate)
 # Connection to SWS #######################################################
 
 if(CheckDebug()){
-  
+
   library(faoswsModules)
   SETT <- ReadSettings("sws.yml")
-  
-  # SetClientFiles(SETT[["certdir"]])
+
   GetTestEnvironment(baseUrl = SETT[["server"]], token = SETT[["token"]])
 
-  # # Initialize client
-  # initializeClient()
+  #initializeClient(conf_file = system("sws_auth -qa -path", T), restart = T)
 }
 
 # Get the list of codelists ###############################################
@@ -37,7 +35,7 @@ source("utils.R")
 # -------------------------------------------------------------------------
 
 ui <- fluidPage(
-  
+
   tags$head(
     tags$style(HTML("
 
@@ -241,7 +239,7 @@ ui <- fluidPage(
         white-space: nowrap;
         text-overflow: ellipsis;
       }
-      
+
       .dataTables_info, .dataTables_length, .dataTables_filter, .dataTables_paginate {
         color: var(--text-muted) !important;
         font-size: 12px !important;
@@ -267,7 +265,7 @@ ui <- fluidPage(
       }
     "))
   ),
-  
+
   # Header
   div(class = "app-header",
       div(
@@ -275,13 +273,13 @@ ui <- fluidPage(
         p(class = "app-subtitle", "Select a codelist, visualize it and export it into Excel.")
       )
   ),
-  
+
   # Body
   div(class = "main-body",
-      
+
       # ── Control section ──────────────────────────
       div(class = "control-card",
-          
+
           div(class = "ctrl-group",
               div(class = "ctrl-label", "Select your codelist"),
               selectInput(
@@ -292,7 +290,7 @@ ui <- fluidPage(
                   width    = "240px"
                 )
               ),
-          
+
           div(class = "ctrl-group",
               div(class = "ctrl-label", "Export"),
               downloadButton(
@@ -302,10 +300,10 @@ ui <- fluidPage(
                 icon     = icon("file-excel")
               )
           ),
-          
+
           uiOutput("info_badge")
       ),
-      
+
       # ── Table section ───────────────────────────────
       div(class = "table-card",
           div(class = "table-card-header",
@@ -323,36 +321,34 @@ ui <- fluidPage(
 server <- function(input, output, session) {
 
   codelists_r <- reactiveVal(NULL)
-
   user <- reactiveVal(NULL)
 
-  observeEvent(TRUE, {
     tryCatch({
-      initialiseClient(session = session, sws_endpoint = "https://sws.fao.org")
+      initialiseClient(conf_file = "sws.yml", session = session, sws_endpoint = "https://sws.fao.org")
+      showNotification("Client initialization successful", type = "default")
       user(getCurrentUser())
-      
+
       codelists <- getAllCodelists()
       updateSelectInput(session, "selected_codelist",
                         choices = c(" " = "", codelists$id))
-      
+
     }, error = function(e) {
       showNotification(paste0("Initialization failed: ", e$message), type = "error")
     })
-  }, once = TRUE, ignoreNULL = FALSE)
-  
+
   # Reactive data in function of the dropdown
   selected_dt <- reactive({
     req(input$selected_codelist)
     get_codelist_info(input$selected_codelist)
   })
-  
+
   # # Get parent-children data
   # pc_data <- reactive({
   #   req(input$selected_codelist)
   #   dt <- selected_dt()
   #   dt[, .(children = unlist(strsplit(as.character(children), ", "))), by = code]
   # })
-  
+
   # Badge with number of rows/columns
   output$info_badge <- renderUI({
     req(input$selected_codelist)
@@ -364,19 +360,19 @@ server <- function(input, output, session) {
         )
     )
   })
-  
+
   # Title of the chart
   output$table_title <- renderText({
     req(input$selected_codelist)
     input$selected_codelist
   })
-  
+
   # Excel output
   output$table <- renderDT({
     dt <- selected_dt()
-    
+
     idx_cols <- as.vector(which(sapply(dt, is.character)) - 1)
-    
+
     col_defs <- if (length(idx_cols) > 0) {
       lapply(idx_cols, function(i) list(
         targets = i,
@@ -390,7 +386,7 @@ server <- function(input, output, session) {
     } else {
       list()
     }
-    
+
     datatable(
       dt,
       options = list(
@@ -403,7 +399,7 @@ server <- function(input, output, session) {
       class    = "display"
     )
   })
-  
+
   # Download codelist as Excel
   output$btn_excel <- downloadHandler(
     filename = function() {
@@ -419,7 +415,7 @@ server <- function(input, output, session) {
       )
     }
   )
-  
+
 }
 
 # -------------------------------------------------------------------------

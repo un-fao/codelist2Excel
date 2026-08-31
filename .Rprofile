@@ -1,4 +1,6 @@
-source("renv/activate.R")
-options(repos = c(
-  CRAN = "https://rstudiopm.fao.org/fao-sws-cran/__linux__/centos7/latest"
+# renv config must be set BEFORE activate.R runs
+options(renv.config.repos.override = c(
+  SWS = "https://qa-sws-rcranrepo.s3.eu-west-1.amazonaws.com/__linux__/noble/latest"
 ))
+
+source("renv/activate.R")
